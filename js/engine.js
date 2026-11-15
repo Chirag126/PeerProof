@@ -198,7 +198,7 @@
 
   /* ---------------- 3. Claim detection ---------------- */
   const CUE_FINDING = /\b(show(s|ed|n)?|demonstrat\w*|found|finds?|observ\w*|reveal\w*|indicat\w*|suggest\w*|confirm\w*|report(s|ed)?|prove[sdn]?|establish\w*|conclude[sd]?|findings?|evidence|consistent with|scored|outperformed)\b/i;
-  const CUE_EFFECT = /\b(increas\w*|decreas\w*|improv\w*|reduc\w*|outperform\w*|enhanc\w*|strengthen\w*|higher|lower|better|worse|greater|significant(ly)?|effective\w*|associated|correlat\w*|leads? to|caus\w*|results? in|predict\w*|affect\w*|accura\w*|retain\w*|benefit\w*|more than|less than|fewer than)\b/i;
+  const CUE_EFFECT = /\b(increas\w*|decreas\w*|improv\w*|reduc\w*|outperform\w*|enhanc\w*|strengthen\w*|higher|lower|better|worse|greater|significant(ly)?|effective\w*|associated|correlat\w*|leads? to|caus\w*|results? in|predict\w*|affect\w*|accura\w*|retain\w*|benefit\w*|more than|less than|fewer than|faster|slower|shorter|longer|disrupt\w*|delay\w*|worsen\w*|prevent\w*|boost\w*|harm\w*|protect\w*)\b/i;
   const CUE_QUANT = /(\d+(\.\d+)?\s*%|\bp\s*[<=>]\s*0?\.\d+|\bmean\b|\bodds ratio\b|\bn\s*=\s*\d+)/i;
   const CUE_META = /^(this (paper|study|report|work)|in this (paper|study)|we (propose|present|describe|organi[sz]e)|the (rest|remainder) of)/i;
 
@@ -269,7 +269,18 @@
     const numericMismatch = cNums.length > 0 && mismatchedNums.length > 0;
 
     const overclaim = STRONG.test(clean) && HEDGE.test(sourceText);
-    const contradiction = NEGATION.test(best.sentence) && !NEGATION.test(clean);
+    let contradiction = NEGATION.test(best.sentence) && !NEGATION.test(clean);
+    // Scope gap: a claim term absent from the best evidence appears in a negated source sentence
+    // e.g. claim "... in nursing students" vs source "The study did not include students."
+    let scopeGap = "";
+    if (!contradiction && !NEGATION.test(clean)) {
+      const bestStems = new Set(tokens(best.sentence).map(stem));
+      for (const s of srcSentences) {
+        if (s === best.sentence || !NEGATION.test(s)) continue;
+        const hit = tokens(s).find((w) => cStem.includes(stem(w)) && !bestStems.has(stem(w)));
+        if (hit) { contradiction = true; scopeGap = hit; best.sentence = best.sentence + " " + s; break; }
+      }
+    }
 
     return {
       score: Math.round(score * 100) / 100,
@@ -284,6 +295,7 @@
       numericMismatch,
       overclaim,
       contradiction,
+      scopeGap,
     };
   }
 
@@ -335,7 +347,9 @@
 
     if (b.contradiction) {
       category = CATEGORIES.REVIEW;
-      rationale = "The closest source sentence contains a negative or non-significant finding that the claim does not mention. The source may not support the claim as stated.";
+      rationale = b.scopeGap
+        ? "The source matches the general idea, but explicitly says it does not cover \"" + b.scopeGap + "\". The claim may extend the source beyond its scope."
+        : "The closest source sentence contains a negative or non-significant finding that the claim does not mention. The source may not support the claim as stated.";
       uncertainty = "High - possible contradiction.";
     } else if (b.score >= 0.55) {
       if (b.numericMismatch) {
@@ -354,7 +368,8 @@
       }
     } else if (b.score >= 0.3) {
       category = CATEGORIES.PARTIAL;
-      rationale = "The source covers part of the claim (" + pct + " term match). Terms not found in the source: " + (b.missingTerms.join(", ") || "-") + ".";
+      rationale = "The source covers part of the claim (" + pct + " term match). Terms not found in the source: " + (b.missingTerms.join(", ") || "-") + "." +
+        (b.overclaim ? " The claim also uses absolute wording while the source is hedged or limited." : "");
       uncertainty = "Medium - partial overlap.";
     } else if (b.score >= 0.15) {
       category = CATEGORIES.REVIEW;
