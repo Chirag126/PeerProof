@@ -103,6 +103,18 @@ h3 { font-size: 14px; margin: 0 0 8px; }
   background: linear-gradient(120deg, #ffffff 0%, var(--g-50) 55%, var(--g-100) 100%);
   border: 1px solid var(--g-200); border-radius: 16px; padding: 26px 28px; display: flex; gap: 24px; align-items: center; justify-content: space-between; flex-wrap: wrap;
 }
+.hero { flex-wrap: nowrap; padding: 22px 28px; }
+.hero-text { flex: 1; min-width: 0; }
+.hero-art { width: 300px; flex-shrink: 0; height: auto; }
+.ha-link { fill: none; stroke: #1f9d55; stroke-width: 2; stroke-dasharray: 5 5; opacity: .7; animation: dash 1.2s linear infinite; }
+.ha-link.warn { stroke: #e9a23b; }
+@keyframes dash { to { stroke-dashoffset: -20; } }
+.ha-float { animation: floaty 4s ease-in-out infinite; }
+.ha-float.d1 { animation-delay: -1s; } .ha-float.d2 { animation-delay: -2s; } .ha-float.d3 { animation-delay: -3s; }
+@keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.ha-scan { animation: scan 5s ease-in-out infinite; }
+@keyframes scan { 0%,100% { transform: translate(0,0); } 33% { transform: translate(0,-42px); } 66% { transform: translate(0,32px); } }
+@media (prefers-reduced-motion: reduce) { .ha-link, .ha-float, .ha-scan { animation: none; } }
 .hero h2 { font-size: 22px; margin-bottom: 6px; }
 .hero p { margin: 0; color: var(--muted); max-width: 560px; }
 
@@ -277,6 +289,8 @@ dl.info dd { margin: 0; font-weight: 500; word-break: break-word; }
   #view { padding: 22px 18px; }
   .foot { padding: 12px 18px 20px; }
   .g2, .g3, .kv, .team { grid-template-columns: 1fr; }
+  .hero { flex-wrap: wrap; }
+  .hero-art { display: none; }
   dl.info { grid-template-columns: 1fr; }
 }
 
