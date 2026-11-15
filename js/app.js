@@ -161,6 +161,50 @@
       </div>`;
   }
 
+  /* Dashboard illustration: paper -> citations -> sources -> verified fingerprint */
+  const HERO_ART = `<svg class="hero-art" viewBox="0 0 340 220" aria-hidden="true">
+    <defs>
+      <linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eaf7ef"/></linearGradient>
+      <filter id="hsh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1f6b3d" flood-opacity=".12"/></filter>
+    </defs>
+    <circle cx="190" cy="110" r="96" fill="#dff3e7"/>
+    <circle cx="190" cy="110" r="70" fill="none" stroke="#c4e8d2" stroke-dasharray="3 6"/>
+    <!-- links paper -> sources -->
+    <path class="ha-link" d="M150 70 C 200 70, 210 40, 252 40" />
+    <path class="ha-link" d="M150 112 C 200 112, 210 110, 252 110" />
+    <path class="ha-link warn" d="M150 154 C 200 154, 210 180, 252 180" />
+    <!-- paper -->
+    <g filter="url(#hsh)" class="ha-float">
+      <rect x="40" y="30" width="118" height="160" rx="10" fill="url(#hg1)" stroke="#c9ecd6"/>
+      <rect x="54" y="44" width="62" height="7" rx="3.5" fill="#1f9d55"/>
+      <rect x="54" y="58" width="88" height="4" rx="2" fill="#cfe3d6"/>
+      <rect x="54" y="66" width="76" height="9" rx="3" fill="#c9f0d8"/><rect x="134" y="66" width="14" height="9" rx="3" fill="#1f9d55"/>
+      <rect x="54" y="82" width="90" height="4" rx="2" fill="#cfe3d6"/>
+      <rect x="54" y="90" width="70" height="4" rx="2" fill="#cfe3d6"/>
+      <rect x="54" y="108" width="76" height="9" rx="3" fill="#c9f0d8"/><rect x="134" y="108" width="14" height="9" rx="3" fill="#1f9d55"/>
+      <rect x="54" y="124" width="88" height="4" rx="2" fill="#cfe3d6"/>
+      <rect x="54" y="132" width="60" height="4" rx="2" fill="#cfe3d6"/>
+      <rect x="54" y="150" width="76" height="9" rx="3" fill="#fde6b8"/><rect x="134" y="150" width="14" height="9" rx="3" fill="#e9a23b"/>
+      <rect x="54" y="166" width="84" height="4" rx="2" fill="#cfe3d6"/>
+    </g>
+    <!-- source cards -->
+    <g filter="url(#hsh)">
+      <g class="ha-float d1"><rect x="252" y="24" width="64" height="34" rx="8" fill="#fff" stroke="#c9ecd6"/><rect x="262" y="34" width="30" height="4" rx="2" fill="#9fdcb6"/><rect x="262" y="43" width="42" height="4" rx="2" fill="#dbeee2"/><circle cx="308" cy="24" r="8" fill="#1f9d55"/><path d="M304.5 24l2.5 2.5 4.5-5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+      <g class="ha-float d2"><rect x="252" y="94" width="64" height="34" rx="8" fill="#fff" stroke="#c9ecd6"/><rect x="262" y="104" width="30" height="4" rx="2" fill="#9fdcb6"/><rect x="262" y="113" width="42" height="4" rx="2" fill="#dbeee2"/><circle cx="308" cy="94" r="8" fill="#1f9d55"/><path d="M304.5 94l2.5 2.5 4.5-5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+      <g class="ha-float d3"><rect x="252" y="164" width="64" height="34" rx="8" fill="#fff" stroke="#f4dfb0"/><rect x="262" y="174" width="30" height="4" rx="2" fill="#f3cf8a"/><rect x="262" y="183" width="42" height="4" rx="2" fill="#f5ead3"/><circle cx="308" cy="164" r="8" fill="#e9a23b"/><path d="M308 160v4.5M308 167.5v.1" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>
+    </g>
+    <!-- magnifier -->
+    <g class="ha-scan">
+      <circle cx="132" cy="122" r="22" fill="rgba(255,255,255,.55)" stroke="#157a41" stroke-width="5"/>
+      <path d="M148 138l16 16" stroke="#157a41" stroke-width="7" stroke-linecap="round"/>
+    </g>
+    <!-- fingerprint shield -->
+    <g filter="url(#hsh)">
+      <path d="M200 176l20 7v13c0 11-8.5 19-20 22-11.5-3-20-11-20-22v-13z" fill="#1f9d55"/>
+      <text x="200" y="203" text-anchor="middle" font-family="monospace" font-size="9" font-weight="700" fill="#fff">#SHA</text>
+    </g>
+  </svg>`;
+
   /* ================= Dashboard ================= */
   function renderDashboard() {
     const list = store.all();
@@ -170,14 +214,15 @@
     view.innerHTML = `
       ${head("Dashboard", "Overview of research papers verified in this browser.")}
       <div class="hero">
-        <div>
+        <div class="hero-text">
           <h2>Check the claims in a research paper — and the sources behind them.</h2>
           <p>PeerProof finds the important claims in a paper, links them to their citations, compares them with the cited sources and explains the result. Every report gets a SHA-256 fingerprint so it can be re-checked later.</p>
+          <div class="actions" style="margin-top:18px">
+            <a class="btn primary" href="#/new">${ic("plus")}New verification</a>
+            <button class="btn soft" id="trySample">${ic("sparkle")}Try sample paper</button>
+          </div>
         </div>
-        <div class="actions">
-          <a class="btn primary" href="#/new">${ic("plus")}New verification</a>
-          <button class="btn soft" id="trySample">${ic("sparkle")}Try sample paper</button>
-        </div>
+        ${HERO_ART}
       </div>
       <div class="grid g4" style="margin-top:16px">
         <div class="card stat accent"><div class="label">${ic("file")}Papers verified</div><div class="value">${fmtNum(t.papers)}</div><div class="sub">Stored in local audit log</div></div>
