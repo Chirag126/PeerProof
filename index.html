@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PeerProof — AI-Assisted Research Paper Verification</title>
+  <meta name="description" content="PeerProof: AI-assisted research-paper claim and citation verification with integrity fingerprints." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231f9d55'/><path d='M9 16.5l4.5 4.5L23 11.5' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#/dashboard">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M16 3l11 4v8c0 7-4.7 12.3-11 14-6.3-1.7-11-7-11-14V7l11-4z" fill="currentColor"/><path d="M11 16.2l3.4 3.4L21.5 12.5" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>
+          <span class="brand-name">Peer<b>Proof</b></span>
+          <span class="brand-tag">Verifiable Research Paper Integrity</span>
+        </span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <a href="#/dashboard" data-route="dashboard"><i data-icon="home"></i>Dashboard</a>
+        <a href="#/new" data-route="new"><i data-icon="plus"></i>New Verification</a>
+        <a href="#/reports" data-route="reports"><i data-icon="file"></i>Verification Reports</a>
+        <a href="#/integrity" data-route="integrity"><i data-icon="shield"></i>Integrity Check</a>
+        <a href="#/methodology" data-route="methodology"><i data-icon="flask"></i>Methodology</a>
+        <a href="#/about" data-route="about"><i data-icon="gear"></i>About &amp; System Info</a>
+      </nav>
+
+      <div class="engine-card">
+        <div class="engine-row"><span>Analysis engine</span><span class="dot" title="Online"></span></div>
+        <div class="engine-name">Local NLP · in-browser</div>
+        <div class="engine-ver"><i data-icon="cpu"></i><span id="engineVersion"></span></div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="mobile-bar">
+        <button class="icon-btn" id="menuBtn" aria-label="Open menu"><i data-icon="menu"></i></button>
+        <span class="brand-name">Peer<b>Proof</b></span>
+      </header>
+      <main id="view" tabindex="-1"></main>
+      <footer class="foot">
+        PeerProof · Academic prototype · School of Science and Mathematics, DES Pune University · Results are indicative and require human review.
+      </footer>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/engine.js"></script>
+  <script src="js/sample.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
