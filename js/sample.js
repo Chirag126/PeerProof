@@ -48,6 +48,30 @@ References
       "8": "Classroom studies show that the spacing effect benefits delayed recall. Students who spread study sessions over several days remembered more material on delayed tests than students who studied in one session.",
     },
   };
+  /*
+   * Demo source-abstract library used by the "Fill SA" button.
+   * Matched to the paper's reference list by first-author surname + year,
+   * so it works for the built-in sample and for test-files/test-paper.txt.
+   * All entries are synthetic.
+   */
+  const LIBRARY = [
+    // Built-in sample paper (spaced repetition)
+    { surname: "Rao", year: "2019", text: SAMPLE.sources["1"] },
+    { surname: "Lin", year: "2020", text: SAMPLE.sources["2"] },
+    { surname: "Deshmukh", year: "2022", text: SAMPLE.sources["3"] },
+    { surname: "Fernandes", year: "2018", text: SAMPLE.sources["4"] },
+    { surname: "Banerjee", year: "2017", text: SAMPLE.sources["6"] },
+    { surname: "Kumar", year: "2021", text: SAMPLE.sources["8"] },
+    // test-files/test-paper.txt (physical activity and sleep)
+    { surname: "Sharma", year: "2020", text: "In a review of 18 trials, regular aerobic exercise improved sleep quality in young adults. The improvement was largest when exercise was performed for at least eight weeks." },
+    { surname: "Patel", year: "2019", text: "University students who exercised three times per week fell asleep 12 minutes faster than inactive students. Total sleep time was similar between groups." },
+    { surname: "Gupta", year: "2021", text: "In this small pilot study of 20 adults, evening exercise may slightly delay sleep onset for some participants. For most participants the effect was not significant." },
+    { surname: "Kulkarni", year: "2018", text: "Among 300 university students, screen use before bedtime reduced total sleep duration by an average of 25 minutes per night." },
+    { surname: "Fernandes", year: "2017", text: "Mindfulness training improved self-reported sleep in hospital nurses. The study did not include students." },
+    { surname: "Nair", year: "2020", text: "Students with more daylight exposure showed earlier and more regular sleep timing." },
+  ];
+  SAMPLE.library = LIBRARY;
+
   if (typeof module === "object" && module.exports) module.exports = SAMPLE;
   else root.PEERPROOF_SAMPLE = SAMPLE;
 })(typeof self !== "undefined" ? self : this);

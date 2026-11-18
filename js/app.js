@@ -273,7 +273,10 @@
           </div>
         </div>
         <div class="card">
-          <h2>Cited source texts <span class="muted small" style="font-weight:500">(optional)</span></h2>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px">
+            <h2 style="margin:0">Cited source texts <span class="muted small" style="font-weight:500">(optional)</span></h2>
+            <button class="btn sm primary" id="fillSA" title="Fill source abstracts from the demo library">${ic("sparkle")}Fill SA</button>
+          </div>
           <p class="small muted" style="margin-top:-6px">Paste the abstract or a relevant excerpt of each cited source. Claims are compared with this text. References without source text are marked <b>Unverified</b>.</p>
           <div id="refPanel" class="ref-list"></div>
         </div>
@@ -290,6 +293,7 @@
     $("#sampleBtn").onclick = () => { loadSampleIntoDraft(); route(); toast("Sample paper loaded"); };
     $("#clearBtn").onclick = () => { Object.assign(draft, { title: "", authors: "", text: "", sources: {}, fileName: "" }); route(); };
     $("#runBtn").onclick = runVerification;
+    $("#fillSA").onclick = fillSourceAbstracts;
     renderInput();
     renderRefPanel();
   }
@@ -343,6 +347,23 @@
       $$("textarea[data-ref]", panel).forEach((ta) => (ta.oninput = () => (draft.sources[ta.dataset.ref] = ta.value)));
     }
     hydrateIcons(panel);
+  }
+
+  function fillSourceAbstracts() {
+    const refs = draft.text ? E.previewReferences(draft.text) : [];
+    if (!refs.length) { toast("Add the paper first — no references detected yet."); return; }
+    const lib = SAMPLE.library || [];
+    let filled = 0;
+    refs.forEach((r) => {
+      const hit = lib.find((e) => e.surname.toLowerCase() === r.surname.toLowerCase() && e.year === r.year.slice(0, 4));
+      if (hit) { draft.sources[r.id] = hit.text; filled++; }
+    });
+    renderRefPanel();
+    if (filled) {
+      toast("Filled " + filled + " of " + refs.length + " source abstracts" + (filled < refs.length ? " (others left empty on purpose)" : ""));
+      const first = $("#refPanel textarea[data-ref]");
+      if (first) $("#refPanel").scrollTop = 0;
+    } else toast("No demo abstracts match these references. Paste them manually.");
   }
 
   const STEPS = ["Reading and normalising text", "Detecting sections and sentences", "Parsing reference list", "Identifying candidate claims", "Mapping citations to references", "Comparing claims with source text", "Classifying and generating report", "Computing SHA-256 fingerprints"];
